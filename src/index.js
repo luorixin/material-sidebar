@@ -6,7 +6,7 @@ import intl from "react-intl-universal";
 import { LocaleProvider } from "antd-mobile";
 import moment from "moment";
 import "moment/locale/zh-cn";
-import enUS from 'antd-mobile/lib/locale-provider/en_US';
+import enUS from "antd-mobile/lib/locale-provider/en_US";
 
 import fhtCookie from "./utils/cookie";
 import store from "./store";
@@ -14,6 +14,7 @@ import store from "./store";
 import reportWebVitals from "./reportWebVitals";
 
 import MaterialManage from "./app/material/App";
+import "./index.less";
 
 const locales = {
   en: require("./static/i18n/en_US.js").default,
@@ -25,7 +26,11 @@ class Content extends Component {
     return (
       <Fragment>
         <MaterialManage />
-        <Route path="/" exact render={() => <Redirect to="/material-manage" />} />
+        <Route
+          path="/"
+          exact
+          render={() => <Redirect to="/material-manage" />}
+        />
       </Fragment>
     );
   }
@@ -57,13 +62,15 @@ class _App extends Component {
       moment.locale("zh-cn");
     }
 
-    intl.init({
+    intl
+      .init({
         currentLocale: locale,
         locales,
-      }).then(() => {
+      })
+      .then(() => {
         this.setState({
-          initDone: true
-        })
+          initDone: true,
+        });
       });
   }
 
