@@ -1,0 +1,1 @@
+export const SET_LOCALE = Symbol('SET_LOCALE')

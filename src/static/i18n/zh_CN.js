@@ -1,14 +1,3 @@
-/*
- * @Author: Zheng Kun
- * @Date: 2020-10-09 15:07:53
- * @LastEditors: Zheng Kun
- * @LastEditTime: 2021-05-06 10:45:57
- * @Description:
- */
-
-import zh_CN_common from '@common/static/i18n/zh_CN.js'
-import { message } from 'antd'
-
 const zh_CN = {
     eweixin: '企微运营',
 
@@ -116,6 +105,9 @@ const zh_CN = {
     messageSendSuccess: '已发送',
     messageSendConflict: '因客户收到其它群发消息而失败',
 
+    materialSelf: '个人素材',
+    materialCommon: '公共素材',
+
     /**************************** staff manage **********************************/
     needSettingTip:
         '部门数据与企业微信同步，若需要修改员工部门请前往企业微信设置，',
@@ -221,7 +213,6 @@ const zh_CN = {
         '提醒员工跟进客户，如果客户长时间未通过好友申请可再次提醒，是否确认发送？',
 
     potentialCustomerImport: '导入客户',
-    potentialCustomerPhone: '电话号码',
     potentialCustomerMemo: '客户备注名',
     potentialCustomerToUsers: '分配员工',
     potentialCustomerUploadTitle: '上传表格',
@@ -330,7 +321,7 @@ const zh_CN = {
     messageTimeSlef: '定时发送',
     messageConfirm: '通知成员发送',
 
-    messageDetail: '群发详情',
+
     messageDataDetail: '数据详情',
     messageCreator: '创建者',
     messageTo: '群发对象',
@@ -351,5 +342,4 @@ const zh_CN = {
     messageTalkTotal: '发送总数'
 }
 
-//export default zh_CN;
-export default Object.assign(zh_CN, zh_CN_common)
+export default zh_CN

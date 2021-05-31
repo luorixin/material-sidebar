@@ -3,16 +3,17 @@ import ReactDOM from "react-dom";
 import { connect, Provider } from "react-redux";
 import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
 import intl from "react-intl-universal";
-import { ConfigProvider } from "antd";
+import { LocaleProvider } from "antd-mobile";
 import moment from "moment";
 import "moment/locale/zh-cn";
-import enUS from "antd/es/locale/en_US";
-import zhCN from "antd/es/locale/zh_CN";
+import enUS from 'antd-mobile/lib/locale-provider/en_US';
 
-import fhtCookie from "@common/utils/cookie";
-import store from "@common/store/index";
+import fhtCookie from "./utils/cookie";
+import store from "./store";
 
 import reportWebVitals from "./reportWebVitals";
+
+import MaterialManage from "./app/material/App";
 
 const locales = {
   en: require("./static/i18n/en_US.js").default,
@@ -23,8 +24,8 @@ class Content extends Component {
   render() {
     return (
       <Fragment>
-        <Route component={Error} />
-        <Route path="/" exact render={() => <Redirect to="/example" />} />
+        <MaterialManage />
+        <Route path="/" exact render={() => <Redirect to="/material-manage" />} />
       </Fragment>
     );
   }
@@ -56,15 +57,13 @@ class _App extends Component {
       moment.locale("zh-cn");
     }
 
-    intl
-      .init({
+    intl.init({
         currentLocale: locale,
         locales,
-      })
-      .then(() => {
+      }).then(() => {
         this.setState({
-          initDone: true,
-        });
+          initDone: true
+        })
       });
   }
 
@@ -99,15 +98,15 @@ class _App extends Component {
           };
 
     return (
-      initDone && (
+      !!initDone && (
         <div>
-          <ConfigProvider locale={locale === "en" ? enUS : zhCN}>
-            <BrowserRouter basename="/apps/wecom/">
+          <LocaleProvider locale={locale === "en" ? enUS : undefined}>
+            <BrowserRouter basename="/sidebar/">
               <Switch>
                 <Content style={extraStyle} changeLocale={this.changeLocale} />
               </Switch>
             </BrowserRouter>
-          </ConfigProvider>
+          </LocaleProvider>
         </div>
       )
     );
@@ -124,7 +123,7 @@ ReactDOM.render(
   <Provider store={store}>
     <App />
   </Provider>,
-  document.getElementById("app")
+  document.getElementById("root")
 );
 
 // If you want to start measuring performance in your app, pass a function

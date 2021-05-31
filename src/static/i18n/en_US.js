@@ -1,13 +1,3 @@
-/*
- * @Author: Zheng Kun
- * @Date: 2020-10-09 15:07:53
- * @LastEditors: Zheng Kun
- * @LastEditTime: 2021-05-06 10:46:18
- * @Description:
- */
-
-import en_US_common from '@common/static/i18n/en_US.js'
-
 const en_US = {
     eweixin: '企微运营',
 
@@ -110,6 +100,9 @@ const en_US = {
     messageCancel: '取消发送',
     messageSuccess: '已发送',
     messageFail: '发送失败',
+
+    materialSelf: '个人素材',
+    materialCommon: '公共素材',
 
     /**************************** staff manage **********************************/
     needSettingTip:
@@ -216,7 +209,6 @@ const en_US = {
         '提醒员工跟进客户，如果客户长时间未通过好友申请可再次提醒，是否确认发送？',
 
     potentialCustomerImport: '导入客户',
-    potentialCustomerPhone: '电话号码',
     potentialCustomerMemo: '客户备注名',
     potentialCustomerToUsers: '分配员工',
     potentialCustomerUploadTitle: '上传表格',
@@ -306,7 +298,7 @@ const en_US = {
     messageCreatedAt: '创建时间',
     messageExecuteAt: '发送时间',
     messageStatus: '发送状态',
-    memberDetail: '群发详情',
+    messageDetail: '群发详情',
     messageCount: '群发内容',
 
     messageBasic: '基础信息',
@@ -321,7 +313,6 @@ const en_US = {
     messageTimeSlef: '定时发送',
     messageConfirm: '通知成员发送',
 
-    messageDetail: '群发详情',
     messageCreator: '创建者',
     messageTo: '群发对象',
     messageSended: '已发送群主',
@@ -339,5 +330,5 @@ const en_US = {
     messageTalkDetail: '群详情'
 }
 
-//export default en_US;
-export default Object.assign(en_US, en_US_common)
+export default en_US;
+
