@@ -38,6 +38,7 @@ const _MaterialCard = memo(({ post = {}, actions }) => {
         <div className="material-title">{post.title}</div>
         <div className="material-des">{post.description}</div>
       </div>
+      <div className="material-action">{actions}</div>
     </div>
   );
 });

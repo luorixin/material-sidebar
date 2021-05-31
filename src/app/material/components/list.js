@@ -10,7 +10,16 @@ import React, {
 import ReactDOM from "react-dom";
 import { connect } from "react-redux";
 
-import { Tabs, ListView, SearchBar, Tag, Flex } from "antd-mobile";
+import {
+  Tabs,
+  ListView,
+  SearchBar,
+  Tag,
+  Flex,
+  Icon,
+  Popover,
+  Modal,
+} from "antd-mobile";
 
 import intl from "react-intl-universal";
 
@@ -20,6 +29,8 @@ import MaterialCard from "@/app/common/materialCard";
 
 import { GET_MATERIALS_SAGA, DELETE_MATERIAL_SAGA } from "@/action/material";
 import _ from "lodash";
+
+const alert = Modal.alert;
 
 const Materials = () => {
   const tabs = [
@@ -88,8 +99,60 @@ const _Filter = memo((props) => {
   );
 });
 
+const MoreAction = ({ delAction }) => {
+  const [visible, setVisible] = useState(false);
+  const handleVisibleChange = (visible) => {
+    setVisible(visible);
+  };
+
+  const onSelect = (opt) => {
+    if (opt.key === "DELETE") {
+      alert(intl.get("ewxDel"), intl.get("materialDelTip"), [
+        { text: "Cancel", onPress: () => console.log("cancel") },
+        {
+          text: "Ok",
+          onPress: () => {
+            delAction();
+          },
+        },
+      ]);
+    }
+    setVisible(false);
+  };
+  return (
+    <Popover
+      mask
+      overlayClassName="fortest"
+      overlayStyle={{ color: "currentColor" }}
+      visible={visible}
+      overlay={[
+        <Popover.Item key="DELETE" value="scan" data-seed="logId">
+          {intl.get("ewxDel")}
+        </Popover.Item>,
+      ]}
+      align={{
+        overflow: { adjustY: 0, adjustX: 0 },
+        offset: [-10, 0],
+      }}
+      onVisibleChange={handleVisibleChange}
+      onSelect={onSelect}
+    >
+      <Icon type="ellipsis" style={{ marginLeft: "10px" }} />
+    </Popover>
+  );
+};
+
 const _Layout = (props) => {
-  const { keyword, skip, limit, total, type, list, getMaterials } = props;
+  const {
+    keyword,
+    skip,
+    limit,
+    total,
+    type,
+    list,
+    getMaterials,
+    deleteMaterial,
+  } = props;
   const [loading, setLoading] = useState(false);
   const [datas, setDatas] = useState(list);
   const [height, setHeight] = useState(
@@ -144,17 +207,42 @@ const _Layout = (props) => {
     [setLoading, getMaterials]
   );
 
+  const doSearch = useCallback(
+    (keyword) => {
+      setLoading(true);
+      getMaterials({ skip: 0, keyword: keyword }, {}, () => {
+        setLoading(false);
+      });
+    },
+    [setLoading, getMaterials]
+  );
+
+  const handleDel = useCallback(
+    (item) => {
+      setLoading(true);
+      deleteMaterial(item.id, (isSuccess) => {
+        if (isSuccess) {
+          const filterDatas = datas.filter((data) => data.id !== item.id);
+          setDatas(filterDatas);
+          setDataSource((dataSource) =>
+            dataSource.cloneWithRows([...filterDatas])
+          );
+        }
+        setLoading(false);
+      });
+    },
+    [setLoading, deleteMaterial, setDatas, setDataSource, datas]
+  );
+
   useEffect(() => {
     const height =
       document.documentElement.clientHeight -
       ReactDOM.findDOMNode(materialListRef.current).offsetTop -
       44;
-    console.log(height);
     setHeight(height);
   }, [materialListRef, setHeight]);
 
   useEffect(() => {
-    console.log(type);
     if (skip === 0) {
       getMaterials(
         {
@@ -187,12 +275,28 @@ const _Layout = (props) => {
     />
   );
   const renderCard = (item, sectionID, rowID) => {
-    return <MaterialCard post={item} key={"card_" + sectionID + rowID} />;
+    if (total === 0) return null;
+    return (
+      <MaterialCard
+        post={item}
+        key={"card_" + sectionID + rowID}
+        actions={
+          <div className="flex-right">
+            <span>发送</span>
+            <MoreAction delAction={() => handleDel(item)} />
+          </div>
+        }
+      />
+    );
   };
 
   return (
     <Fragment>
-      <SearchBar defaultValue={keyword} placeholder="Search" />
+      <SearchBar
+        defaultValue={keyword}
+        onChange={doSearch}
+        placeholder="Search"
+      />
       <Filter callback={callback} />
       <ListView
         ref={materialListRef}
@@ -201,7 +305,7 @@ const _Layout = (props) => {
           <div style={{ padding: 10, textAlign: "center" }}>
             {loading
               ? "Loading..."
-              : skip > total
+              : skip + limit >= total || total === 0
               ? "没有更多数据了"
               : "Loaded"}
           </div>
@@ -247,6 +351,13 @@ const Layout = connect(
           filter,
           callback,
         }),
+      deleteMaterial: (id, callback) => {
+        dispatch({
+          type: DELETE_MATERIAL_SAGA,
+          val: id,
+          callback,
+        });
+      },
     };
   }
 )(_Layout);

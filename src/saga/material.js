@@ -51,49 +51,49 @@ function* getMaterialsSaga(action) {
           description: "1",
         },
         {
-          id: 1,
+          id: 2,
           image: "https://zos.alipayobjects.com/rmsportal/dKbkpPXKfvZzWCM.png",
           type: "IMAGE",
           title: "test",
           description: "2",
         },
         {
-          id: 1,
+          id: 3,
           image: "https://zos.alipayobjects.com/rmsportal/dKbkpPXKfvZzWCM.png",
           type: "LINK",
           title: "test",
           description: "3",
         },
         {
-          id: 1,
+          id: 4,
           image: "https://zos.alipayobjects.com/rmsportal/dKbkpPXKfvZzWCM.png",
           type: "LINK",
           title: "test",
           description: "4",
         },
         {
-          id: 1,
+          id: 5,
           image: "https://zos.alipayobjects.com/rmsportal/dKbkpPXKfvZzWCM.png",
           type: "LINK",
           title: "test",
           description: "5",
         },
         {
-          id: 1,
+          id: 6,
           image: "https://zos.alipayobjects.com/rmsportal/dKbkpPXKfvZzWCM.png",
           type: "LINK",
           title: "test",
           description: "6",
         },
         {
-          id: 1,
+          id: 7,
           image: "https://zos.alipayobjects.com/rmsportal/dKbkpPXKfvZzWCM.png",
           type: "LINK",
           title: "test",
           description: "7",
         },
         {
-          id: 1,
+          id: 8,
           image: "https://zos.alipayobjects.com/rmsportal/dKbkpPXKfvZzWCM.png",
           type: "LINK",
           title: "test",
@@ -115,7 +115,8 @@ function* getMaterialsSaga(action) {
         total: data.data ? results.length : 0,
       },
     });
-    action.callback && action.callback(true, data.data);
+    action.callback &&
+      action.callback(true, { results: results, total: results.length });
   } else {
     Toast.fail(data.error);
     yield put({
@@ -153,7 +154,12 @@ function* getMaterialSaga(action) {
 }
 
 function* deleteMaterial(action) {
-  const data = yield call(services.deleteMaterial, action.val);
+  // const data = yield call(services.deleteMaterial, action.val);
+  yield put({
+    type: SET_MATERIAL_DETAIL,
+    val: {},
+  });
+  const data = { success: true };
 
   if (data.success) {
     action.callback(true);
